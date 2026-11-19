@@ -53,19 +53,19 @@ git clone https://github.com/FabrizioFernandez2008/RebootTech-API.git
 cd RebootTech-API
 ```
 
-**3. Configurar la variable de entorno para JWT**
+**3. Generar y configurar la clave secreta para JWT**
 
-En PowerShell, ejecutar:
+En PowerShell, ejecutar los siguientes comandos para generar una clave aleatoria segura y asignarla a la variable de entorno:
 
 ```powershell
-$env:JWT_SECRET = "TU_CLAVE_SECRETA"
+$bytes = New-Object byte[] 32
+[System.Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+$env:JWT_SECRET = [Convert]::ToBase64String($bytes)
 ```
 
-Se debe utilizar una clave secreta segura para la firma de los tokens JWT. Esta clave no debe compartirse ni subirse al repositorio.
+Esta clave se utiliza para firmar y validar los tokens JWT. Se genera automáticamente al ejecutar los comandos anteriores y se asigna a la variable de entorno JWT_SECRET.
 
 **4. Iniciar el backend**
-
-En PowerShell, ejecutar:
 
 ```powershell
 .\mvnw spring-boot:run
