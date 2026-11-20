@@ -99,12 +99,12 @@ public class SeguridadConfiguracion {
                     HttpMethod.GET,
                     "/api/reparaciones",
                     "/api/reparaciones/buscar"
-                ).hasRole("RECEPCIONISTA")
+                ).hasAnyRole("ADMINISTRADOR", "RECEPCIONISTA")
 
                 .requestMatchers(
                     HttpMethod.GET,
                     "/api/reparaciones/*"
-                ).hasAnyRole("RECEPCIONISTA", "TECNICO")
+                ).hasAnyRole("ADMINISTRADOR", "RECEPCIONISTA", "TECNICO")
 
                 .anyRequest().authenticated()
             )

@@ -106,6 +106,19 @@ public class TrabajadorControlador {
         return ResponseEntity.ok(convertirARespuesta(trabajador));
     }
 
+    @PatchMapping("/{dni}/activar")
+        public ResponseEntity<TrabajadorRespuestaDTO> activarTrabajador(
+                @PathVariable String dni,
+                @AuthenticationPrincipal UsuarioAutenticado usuario) {
+
+        Trabajador trabajador = trabajadorServicio.activarTrabajador(
+                dni,
+                usuario.usuario()
+        );
+
+        return ResponseEntity.ok(convertirARespuesta(trabajador));
+    }
+
     @DeleteMapping("/{dni}")
     public ResponseEntity<Void> eliminarTrabajador(
             @PathVariable String dni,

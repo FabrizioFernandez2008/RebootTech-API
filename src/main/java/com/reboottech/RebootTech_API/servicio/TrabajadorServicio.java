@@ -173,6 +173,34 @@ public class TrabajadorServicio {
         return trabajador;
     }
 
+    public Trabajador activarTrabajador(
+            String dni,
+            String usuarioActual) {
+
+        Trabajador trabajador = obtenerPorDni(dni);
+
+        if (trabajador.isEstado()) {
+            throw new ReglaNegocioException(
+                    "El trabajador ya está activo.");
+        }
+
+        validarQueNoSeaLaCuentaActual(trabajador, usuarioActual);
+
+        Credencial credencial = credencialRepositorio
+                .findByUsuarioIgnoreCase(trabajador.getUsuario())
+                .orElseThrow(() ->
+                        new RecursoNoEncontradoException(
+                                "Credencial no encontrada."));
+
+        trabajador.setEstado(true);
+        trabajadorRepositorio.save(trabajador);
+
+        credencial.setEstado(true);
+        credencialRepositorio.save(credencial);
+
+        return trabajador;
+    }
+
     public void eliminarTrabajador(String dni, String usuarioActual) {
         Trabajador trabajador = obtenerPorDni(dni);
 
