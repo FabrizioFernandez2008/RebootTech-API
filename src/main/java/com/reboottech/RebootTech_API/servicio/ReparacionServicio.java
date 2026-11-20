@@ -135,7 +135,8 @@ public class ReparacionServicio {
                                 "En espera",
                                 "Examinando",
                                 "Reparando",
-                                "Esperando confirmación"
+                                "Esperando confirmación",
+                                "Confirmado"
                         ).contains(reparacion.getEstado()))
                 .toList();
     }
@@ -143,7 +144,7 @@ public class ReparacionServicio {
     public boolean tieneReparacionActiva(String dniTecnico) {
         return obtenerReparacionesAsignadas(dniTecnico).stream()
                 .anyMatch(reparacion ->
-                        List.of("En espera", "Examinando", "Reparando")
+                        List.of("En espera", "Examinando", "Reparando", "Confirmado")
                                 .contains(reparacion.getEstado()));
     }
 
@@ -198,7 +199,7 @@ public class ReparacionServicio {
 
         validarTecnicoAsignado(reparacion, dniTecnico);
 
-        if (!"En espera".equals(reparacion.getEstado())) {
+        if (!List.of("En espera", "Confirmado").contains(reparacion.getEstado())) {
                 throw new ReglaNegocioException(
                         "La reparación no se encuentra en espera.");
         }
@@ -276,7 +277,7 @@ public class ReparacionServicio {
                     "La reparación no está esperando confirmación.");
         }
 
-        reparacion.setEstado("En espera");
+        reparacion.setEstado("Confirmado");
 
         return reparacionRepositorio.save(reparacion);
     }
